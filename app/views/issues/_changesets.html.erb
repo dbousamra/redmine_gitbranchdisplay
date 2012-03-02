@@ -1,49 +1,43 @@
 <% changesets.each do |changeset| %>
-    <div class="changeset <%= cycle('odd', 'even') %>">
-    <p><%= link_to_revision(changeset, changeset.project,
-                            :text => "#{l(:label_revision)} #{changeset.format_identifier}") %><br />
-        <span class="author"><%= authoring(changeset.committed_on, changeset.author) %></span></p>
-    <div class="wiki">
-        <%= textilizable(changeset, :comments) %>
-    </div>
-    <%
-		
-		@issue.assert_repo_exists(@project.repository)
-
-		branches_stripped = @issue.branches(@project.repository, changeset)
-		tags_stripped = @issue.tags(@project.repository, changeset)
-	%>
-	<div id="tags">
- 	<p><%= l(:closest_tag) %>
-			<% if !tags_stripped.empty? %>
-					<%= tags_stripped %>
-			<% else %>
-				<%= l(:no_tags_found) %>
-			<% end %>
-		</p>
-	</div>
-				<div id="branches">
-						 <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
-						<% if branches_stripped.length > @issue.threshold_level %>
-							<a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>"><%= l(:show_more) %></a>
-						<% end %>
-
-	        <ul>
-		        <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
-							<li><%= branch %></li>
-						<% end %>
-
-						<% if branches_stripped.length > @issue.threshold_level %>
-								<div id="<%= "#{changeset.revision}" %>" style="display: none; overflow-x: visible; overflow-y: visible; ">
-									
-									<% branches_stripped[@issue.threshold_level, branches_stripped.length].each do |branch| %>
-										<li><%= branch %></li>
-									<% end %>
-
-								</div>
-						<% end %>
-					</ul>	
-    	</div>
-    	
-    </div>
+   <div class="changeset <%= cycle('odd', 'even') %>">
+      <p><%= link_to_revision(changeset, changeset.project,
+         :text => "#{l(:label_revision)} #{changeset.format_identifier}") %><br />
+         <span class="author"><%= authoring(changeset.committed_on, changeset.author) %></span>
+      </p>
+      <div class="wiki">
+         <%= textilizable(changeset, :comments) %>
+      </div>
+      <%
+         @issue.assert_repo_exists(@project.repository)
+         branches_stripped = @issue.branches(@project.repository, changeset)
+         tags_stripped = @issue.tags(@project.repository, changeset)
+      %>
+      <div id="tags">
+         <p><%= l(:closest_tag) %>
+            <% if !tags_stripped.empty? %>
+               <%= tags_stripped %>
+            <% else %>
+               <%= l(:no_tags_found) %>
+            <% end %>
+         </p>
+      </div>
+      <div id="branches">
+         <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
+         <% if branches_stripped.length > @issue.threshold_level %>
+            <a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>"><%= l(:show_more) %></a>
+         <% end %>
+         <ul>
+            <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
+               <li><%= branch %></li>
+            <% end %>
+            <% if branches_stripped.length > @issue.threshold_level %>
+               <div id="<%= "#{changeset.revision}" %>" style="display: none; overflow-x: visible; overflow-y: visible; ">
+                  <% branches_stripped[@issue.threshold_level, branches_stripped.length].each do |branch| %>
+                     <li><%= branch %></li>
+                  <% end %>
+               </div>
+            <% end %>
+         </ul>
+      </div>
+   </div>
 <% end %>
