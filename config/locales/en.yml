@@ -1,3 +1,8 @@
 # English strings go here for Rails i18n
 en:
   git_branches_threshold_text: "Threshold level for display of git branches. Once past the threshold, a link to display the remaining branches appears."
+  show_more: "More"
+  commit_located_on: "Commit located on "
+  branches_text: "branches"
+  closest_tag: "Closest tag:"
+  no_tags_found: "No tag found"

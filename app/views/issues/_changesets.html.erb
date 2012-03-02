@@ -14,18 +14,18 @@
 		tags_stripped = @issue.tags(@project.repository, changeset)
 	%>
 	<div id="tags">
- 	<p>Closest tag:
+ 	<p><%= l(:closest_tag) %>
 			<% if !tags_stripped.empty? %>
 					<%= tags_stripped %>
 			<% else %>
-				No tags found
+				<%= l(:no_tags_found) %>
 			<% end %>
 		</p>
 	</div>
 				<div id="branches">
-						Commit located on <%= branches_stripped.length %> branches: 
+						 <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
 						<% if branches_stripped.length > @issue.threshold_level %>
-							<a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>">More</a>
+							<a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>"><%= l(:show_more) %></a>
 						<% end %>
 
 	        <ul>
