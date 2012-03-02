@@ -7,47 +7,36 @@
         <%= textilizable(changeset, :comments) %>
     </div>
     <%
-    				threshold = Setting.plugin_redmine_gitbranchdisplay[:git_branches_threshold].to_i
-    				puts threshold.class
+		
+		@issue.assert_repo_exists(@project.repository)
 
-						repository = @project.repository
-						if repository.nil?
-				      flash.now[:error] = l(:project_no_repository, :name => @project.to_s)
-				      render_404
-				      return
-				    end
-				    git_command = "git --git-dir #{repository.url}"
-
-						branches = `#{git_command} branch -r --contains #{changeset.revision}`
-						branches_stripped = branches.strip().split('  ').each { |x| x.chomp! }
-						tags = `#{git_command} describe #{changeset.revision}`
-						tags_stripped = tags.strip().split('  ').each { |x| x.chomp! }
-		%>
-			<div id="tags">
-	    	<p>Closest tag:
-					<% if !tags_stripped.empty? %>
-							<%= tags_stripped %>
-					<% else %>
-						No tags found
-					<% end %>
-				</p>
-			</div>
-
+		branches_stripped = @issue.branches(@project.repository, changeset)
+		tags_stripped = @issue.tags(@project.repository, changeset)
+	%>
+	<div id="tags">
+ 	<p>Closest tag:
+			<% if !tags_stripped.empty? %>
+					<%= tags_stripped %>
+			<% else %>
+				No tags found
+			<% end %>
+		</p>
+	</div>
 				<div id="branches">
 						Commit located on <%= branches_stripped.length %> branches: 
-						<% if branches_stripped.length > threshold %>
+						<% if branches_stripped.length > @issue.threshold_level %>
 							<a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>">More</a>
 						<% end %>
 
 	        <ul>
-		        <% branches_stripped[0,threshold].each do |branch| %>
+		        <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
 							<li><%= branch %></li>
 						<% end %>
 
-						<% if branches_stripped.length > threshold %>
+						<% if branches_stripped.length > @issue.threshold_level %>
 								<div id="<%= "#{changeset.revision}" %>" style="display: none; overflow-x: visible; overflow-y: visible; ">
 									
-									<% branches_stripped[threshold, branches_stripped.length].each do |branch| %>
+									<% branches_stripped[@issue.threshold_level, branches_stripped.length].each do |branch| %>
 										<li><%= branch %></li>
 									<% end %>
 

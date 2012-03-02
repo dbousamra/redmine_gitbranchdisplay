@@ -1,4 +1,5 @@
 require 'redmine'
+require 'issue_changeset_helper_patch'
 
 Redmine::Plugin.register :redmine_gitbranchdisplay do
   name 'Redmine Git Branch Display'
@@ -13,4 +14,8 @@ Redmine::Plugin.register :redmine_gitbranchdisplay do
   project_module :gitbranchdisplay do
     permission :view_gitbranchdisplay, :gitbranchdisplay => :index
   end
+end
+
+Dispatcher.to_prepare do
+  Issue.send(:include, IssueChangesetHelperPatch)
 end
