@@ -7,37 +7,41 @@
       <div class="wiki">
          <%= textilizable(changeset, :comments) %>
       </div>
-      <%
-         @issue.assert_repo_exists(@project.repository)
-         branches_stripped = @issue.branches(@project.repository, changeset)
-         tags_stripped = @issue.tags(@project.repository, changeset)
-      %>
-      <div id="tags">
-         <p><%= l(:closest_tag) %>
-            <% if !tags_stripped.empty? %>
-               <%= tags_stripped %>
-            <% else %>
-               <%= l(:no_tags_found) %>
-            <% end %>
-         </p>
-      </div>
-      <div id="branches">
-         <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
-         <% if branches_stripped.length > @issue.threshold_level %>
-            <a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'appear'); return false;" %>"><%= l(:show_more) %></a>
-         <% end %>
-         <ul>
-            <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
-               <li><%= branch %></li>
-            <% end %>
-            <% if branches_stripped.length > @issue.threshold_level %>
-               <div id="<%= "#{changeset.revision}" %>" style="display: none; overflow-x: visible; overflow-y: visible; ">
-                  <% branches_stripped[@issue.threshold_level, branches_stripped.length].each do |branch| %>
-                     <li><%= branch %></li>
-                  <% end %>
-               </div>
-            <% end %>
-         </ul>
-      </div>
+      
+      <% if @project.module_enabled?('gitbranchdisplay') and @project.repository.type == "Git" %>
+       <% puts @project.repository.type %>
+         <%
+           @issue.assert_repo_exists(@project.repository)
+           branches_stripped = @issue.branches(@project.repository, changeset)
+           tags_stripped = @issue.tags(@project.repository, changeset)
+        %>
+        <div id="tags">
+           <p><%= l(:closest_tag) %>
+              <% if !tags_stripped.empty? %>
+                 <%= tags_stripped %>
+              <% else %>
+                 <%= l(:no_tags_found) %>
+              <% end %>
+           </p>
+        </div>
+        <div id="branches">
+           <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
+           <% if branches_stripped.length > @issue.threshold_level %>
+              <a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'appear'); return false;" %>"><%= l(:show_more) %></a>
+           <% end %>
+           <ul>
+              <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
+                 <li><%= branch %></li>
+              <% end %>
+              <% if branches_stripped.length > @issue.threshold_level %>
+                 <div id="<%= "#{changeset.revision}" %>" style="display: none; overflow-x: visible; overflow-y: visible; ">
+                    <% branches_stripped[@issue.threshold_level, branches_stripped.length].each do |branch| %>
+                       <li><%= branch %></li>
+                    <% end %>
+                 </div>
+              <% end %>
+           </ul>
+        </div>
+      <% end %>
    </div>
 <% end %>
