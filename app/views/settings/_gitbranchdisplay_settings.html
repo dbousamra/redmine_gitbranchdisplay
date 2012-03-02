@@ -1,0 +1,6 @@
+<%
+git_branches_threshold = Setting.plugin_redmine_gitbranchdisplay[:git_branches_threshold] ? Setting.plugin_redmine_gitbranchdisplay[:git_branches_threshold] : 3 %>
+<p>
+<%= content_tag(:label, l(:git_branches_threshold_text)) %>
+<%=  text_field_tag("settings[git_branches_threshold]",git_branches_threshold) %>
+</p>
