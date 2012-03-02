@@ -24,7 +24,7 @@
       <div id="branches">
          <%= l(:commit_located_on) %><%= branches_stripped.length %> <%= l(:branches_text) %> 
          <% if branches_stripped.length > @issue.threshold_level %>
-            <a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'blind'); return false;" %>"><%= l(:show_more) %></a>
+            <a href="#" class="sort desc" onclick="<%= "Effect.toggle('#{changeset.revision}', 'appear'); return false;" %>"><%= l(:show_more) %></a>
          <% end %>
          <ul>
             <% branches_stripped[0,@issue.threshold_level].each do |branch| %>
