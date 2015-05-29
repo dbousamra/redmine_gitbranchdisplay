@@ -16,6 +16,6 @@ Redmine::Plugin.register :redmine_gitbranchdisplay do
   end
 end
 
-Dispatcher.to_prepare do
+Rails.configuration.to_prepare do
   Issue.send(:include, IssueChangesetHelperPatch)
 end
