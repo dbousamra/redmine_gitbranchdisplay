@@ -9,8 +9,8 @@
                :path   => "",
                :rev    => changeset.identifier) + ')') if changeset.filechanges.any? %>
          <small><%= changeset.project.identifier if changeset.project.id != @issue.project.id %></small>
-        <% if changeset.project.module_enabled?('gitbranchdisplay') and changeset.project.repository.type == "Repository::Git" %>
-           <% branches = @issue.branches(changeset.project.repository, changeset) %>
+        <% if changeset.project.module_enabled?('gitbranchdisplay') and changeset.repository.type == "Repository::Git" %>
+           <% branches = @issue.branches(changeset.repository, changeset) %>
            <% if branches.length %>
               <span class="changeset-list"
                     style="float:right; padding-left: 6px; max-width: 60%; font-size: 9px; margin-top: -4px; padding-top: 4px; max-height: 7em; overflow-y: auto;"
