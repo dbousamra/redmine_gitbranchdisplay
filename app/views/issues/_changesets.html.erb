@@ -9,7 +9,7 @@
                :repository_id => changeset.repository.identifier_param,
                :path   => "",
                :rev    => changeset.identifier) + ')') if changeset.filechanges.any? %>
-         <small><%= changeset.project.identifier if changeset.project.id != @issue.project.id %></small>
+         <small><%= (changeset.repository.identifier if changeset.repository.identifier != '') || (changeset.project.identifier if changeset.project.id != @issue.project.id) %></small>
         <% if changeset.project.module_enabled?('gitbranchdisplay') and changeset.repository.type == "Repository::Git" %>
            <% branches = @issue.branches(changeset.repository, changeset) %>
            <% if branches.length %>
@@ -17,7 +17,14 @@
                     style="float:right; padding-left: 6px; max-width: 60%; font-size: 9px; margin-top: -4px; padding-top: 4px; max-height: 7em; overflow-y: auto;"
               ><% master_branches = branches.grep(/^[\w-]*master$/) %>
                <%= raw((master_branches.size > 0 ? master_branches : branches).collect{ |branch|
-                   link_to(branch, {:controller => 'repositories', :action => 'show', :id => changeset.project, :rev => branch}, :title => branch)
+                   link_to(branch, {
+                       :controller => 'repositories',
+                       :action => 'show',
+                       :id => changeset.project,
+                       :repository_id => changeset.repository.identifier_param,
+                       :path => "",
+                       :rev => branch
+                   } , :title => branch)
                 }.compact.join('<br/>')) %></span>
             <% end %>
          <% end %>
